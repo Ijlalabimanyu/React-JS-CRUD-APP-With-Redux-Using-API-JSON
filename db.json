@@ -1,0 +1,30 @@
+{
+    "users" : [
+        {
+            "id": 1,
+            "nama": "Ijlal Abimanyu Agindra",
+            "nim": 2301956600,
+            "jurusan": "Computer Science",
+            "email": "ijlalabimanyu11@gmail.com",
+            "telepon": "081318135284"
+          },
+    
+          {
+            "id": 2,
+           "nama": "Indra",
+            "nim": 2301956600,
+            "jurusan": "Computer Science",
+            "email": "ijlalabimanyu11@gmail.com",
+            "telepon": "081318135284"
+          },
+    
+          {
+            "id": 3,
+            "nama": "Abi",
+            "nim": 2301956600,
+            "jurusan": "Computer Science",
+            "email": "ijlalabimanyu11@gmail.com",
+            "telepon": "081318135284"
+          }
+    ]
+}
