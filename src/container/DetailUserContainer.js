@@ -4,7 +4,7 @@ import BackComponent from '../components/BackComponent';
 import { getUserDetail } from '../actions/userAction';
 import { useParams } from 'react-router-dom';
 
-const DetailUserContainer = ({ userDetail, getUserDetail, history, match }) => {
+const DetailUserContainer = ({ userDetail, getUserDetail }) => {
   let { id } = useParams();
 
   useEffect(() => {
