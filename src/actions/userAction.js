@@ -1,14 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const GET_USERS_LIST = "GET_USERS_LIST";
-export const GET_USER_DETAIL = "GET_USER_DETAIL";
-
+export const GET_USERS_LIST = 'GET_USERS_LIST';
+export const GET_USER_DETAIL = 'GET_USER_DETAIL';
 
 export const getUsersList = () => {
   return (dispatch) => {
     axios
       .get(
-        "https://my-json-server.typicode.com/Ijlalabimanyu/React-JS-CRUD-APP-With-Redux-Using-API-JSON/users"
+        'https://my-json-server.typicode.com/Ijlalabimanyu/React-JS-CRUD-APP-With-Redux-Using-API-JSON/users'
       )
       .then(function (response) {
         // handle success
@@ -33,13 +32,39 @@ export const getUsersList = () => {
         });
       });
   };
+};
+
+export const getUserDetail = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(
+      `https://my-json-server.typicode.com/Ijlalabimanyu/React-JS-CRUD-APP-With-Redux-Using-API-JSON/users/${id}`
+    );
+    console.log(res);
+    dispatch({
+      type: GET_USER_DETAIL,
+      payload: {
+        data: response.data,
+        errorMessage: false,
+      },
+    });
+  } catch (e) {
+    console.log(error);
+    dispatch({
+      type: GET_USER_DETAIL,
+      payload: {
+        data: false,
+        errorMessage: error.message,
+      },
+    });
+  }
 };
 
 export const getUserDetail = (id) => {
   return (dispatch) => {
     axios
       .get(
-        "https://my-json-server.typicode.com/Ijlalabimanyu/React-JS-CRUD-APP-With-Redux-Using-API-JSON/users/" + id
+        'https://my-json-server.typicode.com/Ijlalabimanyu/React-JS-CRUD-APP-With-Redux-Using-API-JSON/users/' +
+          id
       )
       .then(function (response) {
         // handle success
@@ -65,4 +90,3 @@ export const getUserDetail = (id) => {
       });
   };
 };
-
