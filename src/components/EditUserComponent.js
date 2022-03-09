@@ -1,10 +1,10 @@
 import React from "react";
-import { Form, Input, InputNumber, Button, notification } from "antd";
 import { connect, useDispatch } from "react-redux";
-import { postUserCreate } from "../actions/userAction";
-import { CheckCircleFilled } from '@ant-design/icons';
+import { putUserEdit } from "../actions/userAction";
+import { CheckCircleFilled } from "@ant-design/icons";
+import { Form, Input, InputNumber, Button, notification } from "antd";
 
-const CreateUserComponent = () => {
+const EditUserComponent = (props) => {
   const validateMessages = {
     required: "${label} is required!",
     types: {
@@ -16,20 +16,19 @@ const CreateUserComponent = () => {
     },
   };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const onFinish = (values) => {
     notification.open({
-      message: 'Berhasil Tambah Data',
+      message: "Berhasil Mengubah Data",
       description:
-        'Data mahasiswa telah ditambahkan, silahkan untuk memeriksa kembali data Anda.',
-      icon: <CheckCircleFilled style={{ color: '#22c55e' }} />,
+        "Data mahasiswa telah diubah, silahkan untuk memeriksa kembali data Anda.",
+      icon: <CheckCircleFilled style={{ color: "#22c55e" }} />,
     });
-    console.log(values);
-    dispatch(postUserCreate(values))
+    console.log("1. Masuk handle Submit : ", values);
+    dispatch(putUserEdit(values));
   };
 
-  
   return (
     <div>
       <div className="mt-10 sm:mt-0">
@@ -55,20 +54,15 @@ const CreateUserComponent = () => {
                   <div className="col-span-6 sm:col-span-3">
                     <Form.Item
                       className="block text-sm font-medium text-gray-700"
-                      name={["nama"]}
                       label="Nama"
-                      rules={[
-                        {
-                          required: true,
-                        },
-                      ]}
                     >
                       <Input
+                        prefix={props.getUserDetail.nama}
+                        disabled
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         style={{
                           width: "100%",
                         }}
-                        placeholder="John Doe"
                       />
                     </Form.Item>
                   </div>
@@ -76,21 +70,15 @@ const CreateUserComponent = () => {
                   <div className="col-span-6 sm:col-span-3">
                     <Form.Item
                       className="block text-sm font-medium text-gray-700"
-                      name={["nim"]}
                       label="NIM"
-                      rules={[
-                        {
-                          required: true,
-                          type: "number",
-                        },
-                      ]}
                     >
                       <InputNumber
+                        prefix={props.getUserDetail.nim}
+                        disabled
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         style={{
                           width: "100%",
                         }}
-                        placeholder="2301956600"
                       />
                     </Form.Item>
                   </div>
@@ -98,20 +86,15 @@ const CreateUserComponent = () => {
                   <div className="col-span-6 sm:col-span-4">
                     <Form.Item
                       className="block text-sm font-medium text-gray-700"
-                      name={["jurusan"]}
                       label="Jurusan"
-                      rules={[
-                        {
-                          required: true,
-                        },
-                      ]}
                     >
                       <Input
+                        prefix={props.getUserDetail.jurusan}
+                        disabled
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         style={{
                           width: "100%",
                         }}
-                        placeholder="Informatics"
                       />
                     </Form.Item>
                   </div>
@@ -182,4 +165,11 @@ const CreateUserComponent = () => {
   );
 };
 
-export default connect()(CreateUserComponent);
+const mapStateToProps = (state) => {
+  return {
+    getUserDetail: state.users.getUserDetail,
+    errorUserDetail: state.users.errorUserDetail,
+  };
+};
+
+export default connect(mapStateToProps, null)(EditUserComponent);

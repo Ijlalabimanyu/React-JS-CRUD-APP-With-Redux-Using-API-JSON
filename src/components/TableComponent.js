@@ -1,91 +1,94 @@
 import React from "react";
-import { Table, Button, Space, Result, Spin } from "antd";
+import { Table, Button, Space, Result, Spin, Modal } from "antd";
 import {
   InfoCircleFilled,
   DeleteFilled,
   EditFilled,
   PlusCircleFilled,
+  QuestionCircleFilled,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { deleteUser} from "../actions/userAction";
 
-const mapStateToProps = (state) => {
-  return {
-    getUsersList: state.users.getUsersList,
-    errorUsersList: state.users.errorUsersList,
-  };
+const handleClick = (dispatch, id) => {
+  confirm({
+    title: "Anda yakin ingin menghapus data ?",
+    icon: <QuestionCircleFilled style={{ color: "#ef4444" }} />,
+    content: "Data yang telah dihapus akan hilang.",
+    async onOk() {
+      try {
+        return await new Promise((resolve, reject) => {
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          console.log("OK");
+          dispatch(deleteUser(id));
+        });
+      } catch {
+        return console.log("Oops errors!");
+      }
+    },
+    onCancel() {
+      console.log("Cancel");
+    },
+  });
 };
 
-const columns = [
-  {
-    title: "Nama",
-    dataIndex: "nama",
-    key: "nama",
-    width: "20%",
-  },
-  {
-    title: "NIM",
-    dataIndex: "nim",
-    key: "nim",
-    width: "10%",
-  },
-  //   {
-  //     title: "Jurusan",
-  //     dataIndex: "jurusan",
-  //     key: "jurusan",
-  //   },
-
-  //   {
-  //     title: "Email",
-  //     dataIndex: "email",
-  //     key: "email",
-  //   },
-
-  //   {
-  //     title: "Telepon",
-  //     dataIndex: "telepon",
-  //     key: "telepon",
-  //   },
-
-  {
-    title: "Action",
-    key: "action",
-    width: "10%",
-    render: (text, record) => (
-      <Space>
-        <Link to={"detail/" + record.id}>
-          <Button
-            type="primary"
-            icon={<InfoCircleFilled />}
-            className="inline-flex justify-center border border-transparent shadow-sm text-sm font-semibold rounded-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Detail
-          </Button>
-        </Link>
-
-        <Link to={"edit/" + record.id}>
-          <Button
-            type="primary"
-            icon={<EditFilled />}
-            className="inline-flex justify-center border border-transparent shadow-sm text-sm font-semibold rounded-md bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-          >
-            Edit
-          </Button>
-        </Link>
-
-        <Button
-          type="danger"
-          icon={<DeleteFilled />}
-          className="inline-flex justify-center border border-transparent shadow-sm text-sm font-semibold rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-        >
-          Delete
-        </Button>
-      </Space>
-    ),
-  },
-];
+const { confirm } = Modal;
 
 const TableComponent = (props) => {
+
+  const columns = [
+    {
+      title: "Nama",
+      dataIndex: "nama",
+      key: "nama",
+      width: "20%",
+    },
+    {
+      title: "NIM",
+      dataIndex: "nim",
+      key: "nim",
+      width: "10%",
+    },
+    {
+      title: "Action",
+      key: "action",
+      width: "10%",
+      render: (text, record) => (
+        <Space>
+          <Link to={"detail/" + record.id}>
+            <Button
+              type="primary"
+              icon={<InfoCircleFilled />}
+              className="inline-flex justify-center border border-transparent shadow-sm text-sm font-semibold rounded-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Detail
+            </Button>
+          </Link>
+
+          <Link to={"edit/" + record.id}>
+            <Button
+              type="primary"
+              icon={<EditFilled />}
+              className="inline-flex justify-center border border-transparent shadow-sm text-sm font-semibold rounded-md bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            >
+              Edit
+            </Button>
+          </Link>
+
+          <Button
+            type="danger"
+            icon={<DeleteFilled />}
+            onClick={() => handleClick(props.dispatch, record.id)}
+            className="inline-flex justify-center border border-transparent shadow-sm text-sm font-semibold rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Delete
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <div className="container mx-auto">
       <h1 className="text-4xl text-center font-bold">Tabel Data Mahasiswa</h1>
@@ -128,6 +131,14 @@ const TableComponent = (props) => {
       )}
     </div>
   );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    getUsersList: state.users.getUsersList,
+    errorUsersList: state.users.errorUsersList,
+    deleteUser: state.users.deleteUser,
+  };
 };
 
 export default connect(mapStateToProps, null)(TableComponent);
