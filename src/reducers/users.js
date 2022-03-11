@@ -16,6 +16,9 @@ let initialState = {
   getDataUser: false,
   errorDataUser: false,
 
+  editDataUser: false,
+  erroreditDataUser: false,
+
   deleteUser: false,
   errordDeleteUser: false,
 };
@@ -44,11 +47,10 @@ const users = (state = initialState, action) => {
       };
 
     case PUT_USER_EDIT:
-      console.log("4. Masuk Reducer : ");
       return {
         ...state,
-        getDataUser: action.payload.data,
-        errorDataUser: action.payload.errorMessage,
+        editDataUser: action.payload.data,
+        erroreditDataUser: action.payload.errorMessage,
       };
 
     case DELETE_USER:

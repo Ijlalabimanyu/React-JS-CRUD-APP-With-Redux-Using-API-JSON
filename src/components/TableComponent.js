@@ -1,5 +1,7 @@
-import React from "react";
-import { Table, Button, Space, Result, Spin, Modal } from "antd";
+import React, { useState, useRef } from "react";
+import Highlighter from "react-highlight-words";
+import { SearchOutlined } from "@ant-design/icons";
+import { Table, Button, Space, Result, Spin, Modal, Input } from "antd";
 import {
   InfoCircleFilled,
   DeleteFilled,
@@ -9,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { deleteUser} from "../actions/userAction";
+import { deleteUser } from "../actions/userAction";
 
 const handleClick = (dispatch, id) => {
   confirm({
@@ -34,8 +36,65 @@ const handleClick = (dispatch, id) => {
 };
 
 const { confirm } = Modal;
+const { Search } = Input;
 
 const TableComponent = (props) => {
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  let searchInput;
+
+  const onSearch = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
+      <div style={{ padding: 8 }}>
+        <Search
+          ref={(node) => {
+            searchInput = node;
+          }}
+          placeholder="Search"
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 200 }}
+          allowClear
+        />
+      </div>
+    ),
+
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        : "",
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
 
   const columns = [
     {
@@ -43,12 +102,14 @@ const TableComponent = (props) => {
       dataIndex: "nama",
       key: "nama",
       width: "20%",
+      ...onSearch("nama"),
     },
     {
       title: "NIM",
       dataIndex: "nim",
       key: "nim",
       width: "10%",
+      ...onSearch("nim"),
     },
     {
       title: "Action",
@@ -106,6 +167,7 @@ const TableComponent = (props) => {
           Add
         </Button>
       </Link>
+
       {props.getUsersList ? (
         <Table columns={columns} dataSource={props.getUsersList} />
       ) : (

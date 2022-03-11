@@ -25,8 +25,20 @@ const EditUserComponent = (props) => {
         "Data mahasiswa telah diubah, silahkan untuk memeriksa kembali data Anda.",
       icon: <CheckCircleFilled style={{ color: "#22c55e" }} />,
     });
-    console.log("1. Masuk handle Submit : ", values);
-    dispatch(putUserEdit(values));
+    console.log(values);
+    dispatch(putUserEdit(values, props.getUserDetail.id));
+  };
+
+  const [form] = Form.useForm();
+
+  const onFill = () => {
+    form.setFieldsValue({
+      nama: props.getUserDetail.nama,
+      nim: props.getUserDetail.nim,
+      jurusan: props.getUserDetail.jurusan,
+      email: props.getUserDetail.email,
+      telepon: props.getUserDetail.telepon,
+    });
   };
 
   return (
@@ -45,6 +57,7 @@ const EditUserComponent = (props) => {
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
             <Form
+              form={form}
               name="nest-messages"
               onFinish={onFinish}
               validateMessages={validateMessages}
@@ -55,9 +68,9 @@ const EditUserComponent = (props) => {
                     <Form.Item
                       className="block text-sm font-medium text-gray-700"
                       label="Nama"
+                      name={["nama"]}
                     >
                       <Input
-                        prefix={props.getUserDetail.nama}
                         disabled
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         style={{
@@ -71,9 +84,9 @@ const EditUserComponent = (props) => {
                     <Form.Item
                       className="block text-sm font-medium text-gray-700"
                       label="NIM"
+                      name={["nim"]}
                     >
                       <InputNumber
-                        prefix={props.getUserDetail.nim}
                         disabled
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         style={{
@@ -87,9 +100,9 @@ const EditUserComponent = (props) => {
                     <Form.Item
                       className="block text-sm font-medium text-gray-700"
                       label="Jurusan"
+                      name={["jurusan"]}
                     >
                       <Input
-                        prefix={props.getUserDetail.jurusan}
                         disabled
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         style={{
@@ -132,22 +145,20 @@ const EditUserComponent = (props) => {
                         },
                       ]}
                     >
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                          +62
-                        </span>
-                        <InputNumber
-                          className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                          style={{
-                            width: "100%",
-                          }}
-                          placeholder="81267384951"
-                        />
-                      </div>
+                      <InputNumber
+                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        style={{
+                          width: "100%",
+                        }}
+                        placeholder="81267384951"
+                      />
                     </Form.Item>
                   </div>
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                  <Button type="link" htmlType="button" onClick={onFill}>
+                    Auto
+                  </Button>
                   <Button
                     type="primary"
                     htmlType="submit"

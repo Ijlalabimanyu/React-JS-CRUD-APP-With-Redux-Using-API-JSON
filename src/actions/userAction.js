@@ -94,13 +94,12 @@ export const postUserCreate = (values) => {
 };
 
 export const putUserEdit = (values, id) => {
-  console.log("2. Masuk Action");
   return (dispatch) => {
     axios
       .put("http://localhost:3000/users/" + id, values)
       .then(function (response) {
         // handle success
-        console.log("3. Berhasil Update: ", response);
+        console.log(response);
         dispatch({
           type: PUT_USER_EDIT,
           payload: {
@@ -111,7 +110,7 @@ export const putUserEdit = (values, id) => {
       })
       .catch(function (error) {
         // handle error
-        console.log("3. Gagal Update : ", error);
+        console.log(error);
         dispatch({
           type: PUT_USER_EDIT,
           payload: {

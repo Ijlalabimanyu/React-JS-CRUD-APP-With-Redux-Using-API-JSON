@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Input, InputNumber, Button, notification } from "antd";
 import { connect, useDispatch } from "react-redux";
 import { postUserCreate } from "../actions/userAction";
-import { CheckCircleFilled } from '@ant-design/icons';
+import { CheckCircleFilled } from "@ant-design/icons";
 
 const CreateUserComponent = () => {
   const validateMessages = {
@@ -16,20 +16,19 @@ const CreateUserComponent = () => {
     },
   };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const onFinish = (values) => {
-    notification.open({
-      message: 'Berhasil Tambah Data',
-      description:
-        'Data mahasiswa telah ditambahkan, silahkan untuk memeriksa kembali data Anda.',
-      icon: <CheckCircleFilled style={{ color: '#22c55e' }} />,
-    });
     console.log(values);
-    dispatch(postUserCreate(values))
+    dispatch(postUserCreate(values));
+    notification.open({
+      message: "Berhasil Tambah Data",
+      description:
+        "Data mahasiswa telah ditambahkan, silahkan untuk memeriksa kembali data Anda.",
+      icon: <CheckCircleFilled style={{ color: "#22c55e" }} />,
+    });
   };
 
-  
   return (
     <div>
       <div className="mt-10 sm:mt-0">
